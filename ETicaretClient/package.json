@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "@popperjs/core": "^2.11.8",
+    "alertifyjs": "^1.14.0",
     "bootstrap": "^5.3.3",
     "jquery": "^3.7.1",
     "rxjs": "~7.8.0",
