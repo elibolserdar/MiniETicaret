@@ -12,7 +12,7 @@ declare var $: any
 export class AppComponent {
   title = 'ETicaretClient';
   constructor(private toastrService: CustomToastrService){
-    toastrService.message("Merhaba", "Serdar", {messageType: ToastrMessageType.Info, position: ToastrPosition.TopCenter});
+    // toastrService.message("Merhaba", "Serdar", {messageType: ToastrMessageType.Info, position: ToastrPosition.TopCenter});
   }
 }
 
