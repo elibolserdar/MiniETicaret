@@ -27,7 +27,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpGet]
-        public async Task GetAsync()
+        public async Task<IActionResult> Get()
         {
             //await _customerWriteRepository.AddAsync(new()
             //{
@@ -35,11 +35,13 @@ namespace ETicaretAPI.API.Controllers
             //    Name = "Serdarr"
             //});
 
-            Customer customer = await _customerReadRepository.GetByIdAsync("cfe5c0c3-d51e-450f-b505-c4eb381adf23");
+            return Ok("Merhaba");
 
-            customer.Name = "Serdar Elibol";
+            //Customer customer = await _customerReadRepository.GetByIdAsync("cfe5c0c3-d51e-450f-b505-c4eb381adf23");
+
+            //customer.Name = "Serdar Elibol";
             
-            _customerWriteRepository.Update(customer);
+            //_customerWriteRepository.Update(customer);
 
             //await _productWriteRepository.AddRangeAsync(new()
             //{
@@ -48,7 +50,7 @@ namespace ETicaretAPI.API.Controllers
             //    new() { Id = Guid.NewGuid(), Name = "Product 6", Price = 600, Stock = 60}
             //});
 
-            await _productWriteRepository.SaveAsync();
+            //await _productWriteRepository.SaveAsync();
         }
 
         [HttpGet("{id}")]
