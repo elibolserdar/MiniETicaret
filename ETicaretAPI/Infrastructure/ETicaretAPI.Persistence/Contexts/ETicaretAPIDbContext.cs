@@ -20,7 +20,7 @@ namespace ETicaretAPI.Persistence.Contexts
 
         //SaveChangeAsync Interceptor
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
+            {
             //ChangeTracker: Entityler üzerinden yapılan değişikliklerin ya da yeni eklenen verinin yakalanmasını sağlayan propertydir. Update opersyonlarında Track edilen verileri yakalayıp elde etmemizi sağlar
             
             var dataList = ChangeTracker.Entries<BaseEntity>();
@@ -30,7 +30,8 @@ namespace ETicaretAPI.Persistence.Contexts
                 _ = data.State switch
                 {
                     EntityState.Added => data.Entity.CreatedDate = DateTime.UtcNow,
-                    EntityState.Modified => data.Entity.UpdatedDate = DateTime.UtcNow
+                    EntityState.Modified => data.Entity.UpdatedDate = DateTime.UtcNow,
+                    _ => DateTime.UtcNow
                 };
             }
 
