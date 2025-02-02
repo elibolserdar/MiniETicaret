@@ -1,4 +1,7 @@
+using ETicaretAPI.Application.Validators.Products;
 using ETicaretAPI.Persistence;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,13 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
 ));
 
 builder.Services.AddControllers();
+
+builder.Services
+    .AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters();// Sadece client-side validation için
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateProductValidator>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
