@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { Create_Product } from 'src/app/contracts/create_product';
-import { AlertifyService, AlertPosition, MessageType } from 'src/app/services/admin/alertify.service';
+import { AlertifyService, AlertPosition, AlertifyMessageType } from 'src/app/services/admin/alertify.service';
 import { ProductService } from 'src/app/services/common/models/product.service';
 
 @Component({
@@ -29,7 +29,7 @@ export class CreateComponent extends BaseComponent {
       this.hideSpinner(SpinnerType.BallAtom);
       this.alertify.message("Ürün başarıyla eklenmiştir.", {
         dismissOthers: true,
-        messageType: MessageType.Success,
+        messageType: AlertifyMessageType.Success,
         position: AlertPosition.TopRight
       });
       this.createdProduct.emit(create_product);
@@ -37,7 +37,7 @@ export class CreateComponent extends BaseComponent {
       this.alertify.message(errorMessage,
         {
           dismissOthers: true,
-          messageType: MessageType.Error,
+          messageType: AlertifyMessageType.Error,
           position: AlertPosition.TopRight
         });
     });
