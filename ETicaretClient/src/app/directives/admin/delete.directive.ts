@@ -1,10 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Directive, ElementRef, EventEmitter, HostListener, inject, Input, Output, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SpinnerType } from 'src/app/base/base.component';
 import { DeleteDialogComponent, DeleteState } from 'src/app/dialogs/delete-dialog/delete-dialog.component';
 import { AlertifyService, AlertifyMessageType as AlertMessageType, AlertPosition } from 'src/app/services/admin/alertify.service';
-import { ProductService } from 'src/app/services/common/models/product.service';
+import { HttpClientService } from 'src/app/services/common/http-client.service';
 
 declare var $: any;
 
@@ -16,7 +17,7 @@ export class DeleteDirective {
   constructor(
     private element: ElementRef,
     private _renderer: Renderer2,
-    private productService: ProductService,
+    private httpClientService: HttpClientService,
     private alertify: AlertifyService,
     private spinner: NgxSpinnerService
   ) {
@@ -30,36 +31,42 @@ export class DeleteDirective {
   }
 
   readonly dialog = inject(MatDialog);
-  
+
   @Input() id: string;
-  @Output() callback: EventEmitter<any>= new EventEmitter();
+  @Input() controller: string;
+  @Output() callback: EventEmitter<any> = new EventEmitter();
   @HostListener("click")
 
   async onclick() {
-    this.openDialog(async() => {
+    this.openDialog(async () => {
       this.spinner.show(SpinnerType.BallAtom)
       const td: HTMLTableCellElement = this.element.nativeElement;
-  
-      await this.productService.delete(this.id, () => {
-        this.alertify.message("Kayıt başarıyla silinmiştir.", {
-          dismissOthers: true,
-          messageType: AlertMessageType.Success,
-          position: AlertPosition.TopRight
-        })
-        $(td.parentElement).animate({
-          opacity: 0,
-          left: "+=50",
-          height: "toggle"
-        }, 700, () => {
-          this.callback.emit();
-        });
-      }, errorMessage => {
-        this.alertify.message(errorMessage, {
-          dismissOthers: true,
-          messageType: AlertMessageType.Error,
-          position: AlertPosition.TopRight
-        })
-      });
+      this.httpClientService.delete({
+        controller: this.controller
+      }, this.id).subscribe({
+        next: data => {
+          this.alertify.message("Kayıt başarıyla silinmiştir.", {
+            dismissOthers: true,
+            messageType: AlertMessageType.Success,
+            position: AlertPosition.TopRight
+          })
+          $(td.parentElement).animate({
+            opacity: 0,
+            left: "+=50",
+            height: "toggle"
+          }, 700, () => {
+            this.callback.emit();
+          });
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          this.spinner.hide(SpinnerType.BallAtom)
+          this.alertify.message(errorResponse.message, {
+            dismissOthers: true,
+            messageType: AlertMessageType.Error,
+            position: AlertPosition.TopRight
+          })
+        }
+      })
     });
   }
 
@@ -69,7 +76,7 @@ export class DeleteDirective {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result == DeleteState.Yes)
+      if (result == DeleteState.Yes)
         afterClosed();
     });
   }

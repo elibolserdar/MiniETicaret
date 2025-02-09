@@ -18,7 +18,8 @@ export class ProductService {
     }, product)
       .subscribe({
         next: (result) => {
-          if (successCallBack) successCallBack();
+          if (successCallBack) 
+            successCallBack();
         },
         error: (errorResponse: HttpErrorResponse) => {
           let message = "Bilinmeyen bir hata oluştu.";
